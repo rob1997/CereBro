@@ -2,14 +2,16 @@ using System;
 using System.Text.Json;
 using OpenAI.Chat;
 
-namespace Brain;
+namespace Brain.Tools;
 
 public class WeatherTool : OpenAiTool
 {
     public override string Name => "GetWeather";
     
+    public override string Description => "Get the weather in a given location";
+
     public override ChatTool ChatTool => ChatTool.CreateFunctionTool(
-        functionName: Name, functionDescription: "Get the weather in a given location",
+        functionName: Name, functionDescription: Description,
         functionParameters: BinaryData.FromBytes("""
                                                  {
                                                      "type": "object",
