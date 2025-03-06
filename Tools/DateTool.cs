@@ -1,5 +1,4 @@
-using System;
-using OpenAI.Chat;
+using Newtonsoft.Json.Linq;
 
 namespace Brain.Tools;
 
@@ -9,13 +8,10 @@ public class DateTool : OpenAiTool
     
     public override string Description => "Get the current date";
     
-    public override ChatTool ChatTool => ChatTool.CreateFunctionTool(
-        functionName: Name,
-        functionDescription: Description
-    );
-    
-    public override string Execute(BinaryData arguments)
+    public override ToolParameters? Parameters => null;
+
+    protected override string Execute(JToken arguments)
     {
-        return "January 1, 2022";
+        return "January 1, 2025";
     }
 }

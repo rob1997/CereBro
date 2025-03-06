@@ -1,5 +1,4 @@
-using System;
-using OpenAI.Chat;
+using Newtonsoft.Json.Linq;
 
 namespace Brain.Tools;
 
@@ -8,12 +7,10 @@ public class LocationTool : OpenAiTool
     public override string Name => "GetCurrentLocation";
     
     public override string Description => "Get the user's current location";
+    
+    public override ToolParameters? Parameters => null;
 
-    public override ChatTool ChatTool => ChatTool.CreateFunctionTool(
-        functionName: Name,
-        functionDescription: Description
-    );
-    public override string Execute(BinaryData arguments)
+    protected override string Execute(JToken arguments)
     {
         return "Austin, TX";
     }

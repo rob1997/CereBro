@@ -1,6 +1,5 @@
-using System;
-using System.Text.Json;
-using OpenAI.Chat;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace Brain.Tools;
 
@@ -10,64 +9,25 @@ public class WeatherTool : OpenAiTool
     
     public override string Description => "Get the weather in a given location";
 
-    public override ChatTool ChatTool => ChatTool.CreateFunctionTool(
-        functionName: Name, functionDescription: Description,
-        functionParameters: BinaryData.FromBytes("""
-                                                 {
-                                                     "type": "object",
-                                                     "properties": {
-                                                         "location": {
-                                                             "type": "string",
-                                                             "description": "The city and state, e.g. Boston, MA"
-                                                         },
-                                                         "date": {
-                                                            "type": "string",
-                                                            "description": "The current date, e.g. March 1, 2019"
-                                                        },
-                                                         "unit": {
-                                                             "type": "string",
-                                                             "enum": [ "celsius", "fahrenheit" ],
-                                                             "description": "The temperature unit to use. Infer this from the specified location."
-                                                         }
-                                                     },
-                                                     "required": [ "location", "date" ]
-                                                 }
-                                                 """u8.ToArray()));
-
-    public override string Execute(BinaryData arguments)
+    public override ToolParameters? Parameters => new ToolParameters(
+      properties: new Dictionary<string, ToolProperty>
     {
-        using JsonDocument argumentsJson = JsonDocument.Parse(arguments);
-        bool hasLocation =
-            argumentsJson.RootElement.TryGetProperty("location", out JsonElement location);
-                                    
-        bool hasDate = argumentsJson.RootElement.TryGetProperty("date", out JsonElement date);
-        
-        bool hasUnit = argumentsJson.RootElement.TryGetProperty("unit", out JsonElement unit);
+        {"location", new ToolProperty("string", "The city and state, e.g. Boston, MA")},
+        {"date", new ToolProperty("string", "The current date, e.g. March 1, 2019")},
+        {"unit", new ToolProperty("string", "The temperature unit to use. Infer this from the specified location.", new[] { "celsius", "fahrenheit" })}
+    },
+        required: new[] { "location", "date" }
+    );
 
-        //Note that the model may hallucinate arguments too. Consequently, it is important to do the
-        // appropriate parsing and validation before calling the function.
-        if (!hasLocation)
-        {
-            throw new ArgumentNullException(nameof(location),
-                "The location argument is required");
-        }
-        
-        if (!hasDate)
-        {
-            throw new ArgumentNullException(nameof(date),
-                "The date argument is required");
-        }
-                                    
-        string toolResult = hasUnit
-            ? Execute(location.GetString(), date.GetString(), unit.GetString())
-            : Execute(location.GetString(), date.GetString());
-
-        return toolResult;
-    }
-
-    private static string Execute(string location, string date, string unit = "celsius")
+    protected override string Execute(JToken arguments)
     {
-        // Call the weather API here.
+        string location = arguments["location"].ToString();
+        
+        string date = arguments["date"].ToString();
+        
+        string unit = arguments["unit"] != null ? arguments["unit"].ToString() : "celcius";
+        
+        // TODO use some weather API to get the weather for the specified location and date
         return $"31 {unit}";
     }
 }
