@@ -5,19 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Brain.Tools;
 using Brain.Utilities;
+using Newtonsoft.Json.Linq;
 using OpenAI.Chat;
 
 namespace Brain;
 
-public class OpenAiChatProvider
+public class OpenAiChatProvider : IChatProvider
 {
-    public enum Actor
-    {
-        User,
-        Brain,
-        Tool
-    }
-    
     private ChatClient _client;
     
     private ChatCompletionOptions _options;
@@ -26,19 +20,17 @@ public class OpenAiChatProvider
 
     private AsyncCollectionResult<StreamingChatCompletionUpdate> _completion;
 
-    private Queue<ChatToolCall> _toolCallQueue = new Queue<ChatToolCall>();
-    
-    public delegate Task ChatCompleted(Actor actor);
+    public Func<Role, Task> Completed { get; private set; }
 
-    public event ChatCompleted OnChatCompleted;
-
-    public OpenAiTool[] Tools =>new OpenAiTool[]
+    public ITool[] Tools => new ITool[]
     {
         new WeatherTool(),
         new LocationTool(),
         new DateTool(),
     };
-    
+
+    public Queue<ToolCall> CallQueue { get; private set; } = new Queue<ToolCall>();
+
     public OpenAiChatProvider()
     {
         _client = new ChatClient(model: "gpt-4o", Store.Instance.ApiKey);
@@ -47,26 +39,26 @@ public class OpenAiChatProvider
         
         foreach (var tool in Tools)
         {
-            _options.Tools.Add(tool.ChatTool);
+            _options.Tools.Add(tool.ChatTool());
         }
         
-        OnChatCompleted += actor =>
+        Completed += role =>
         {
-            switch (actor)
+            switch (role)
             {
-                case Actor.User: case Actor.Tool:
+                case Role.User: case Role.Tool:
                     return CompleteBrainChat();
-                case Actor.Brain:
-                    if (_toolCallQueue.Count != 0)
+                case Role.Brain:
+                    if (CallQueue.Count != 0)
                     {
-                        return UseTools();
+                        return (this as IChatProvider).UseTools();
                     }
                     else
                     {
                         return CompleteUserChat();
                     }
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(actor), actor, null);
+                    throw new ArgumentOutOfRangeException(nameof(role), role, null);
             }
         };
     }
@@ -84,7 +76,7 @@ public class OpenAiChatProvider
         
         _messages.Add(Console.ReadLine());
         
-        return OnChatCompleted?.Invoke(Actor.User);
+        return Completed?.Invoke(Role.User);
     }
     
     public async Task CompleteBrainChat()
@@ -146,6 +138,8 @@ public class OpenAiChatProvider
 
         if (toolCompletion.Count > 0)
         {
+            List<ChatToolCall> toolCalls = new List<ChatToolCall>();
+            
             foreach (var toolCallUpdates in toolCompletion)
             {
                 BinaryData[] arguments = Array.ConvertAll(toolCallUpdates.Value.ToArray(), u => u.FunctionArgumentsUpdate);
@@ -153,55 +147,19 @@ public class OpenAiChatProvider
                 var toolCall = ChatToolCall.CreateFunctionToolCall(toolCallUpdates.Key,
                     toolCallUpdates.Value[0].FunctionName, arguments.Combine());
             
-                _toolCallQueue.Enqueue(toolCall);
-            }
-        }
-        
-        var task = OnChatCompleted?.Invoke(Actor.Brain);
-        
-        if (task != null) await task;
-    }
-
-    private async Task UseTools()
-    {
-        _messages.Add(new AssistantChatMessage(_toolCallQueue.ToList()));
-
-        while (_toolCallQueue.Count != 0)
-        {
-            var toolCall = _toolCallQueue.Peek();
-            
-            if (Tools.Any(t => t.Name == toolCall.FunctionName))
-            {
-                var tool = Tools.First(t => t.Name == toolCall.FunctionName);
+                toolCalls.Add(toolCall);
                 
-                Console.WriteLine($"[TOOL]: Use {tool.Name} tool? (Y/N)");
-
-                switch (Console.ReadLine()?.ToUpper())
+                CallQueue.Enqueue(new ToolCall(toolCall.FunctionName, result =>
                 {
-                    case "Y":
-                        string message = await tool.Execute(toolCall.FunctionArguments);
-                
-                        _messages.Add(new ToolChatMessage(toolCall.Id, message));
-                        break;
-                    case "N":
-                        _messages.Add(new ToolChatMessage(toolCall.Id, "tool call failed"));
-                        break;
-                    default:
-                        Console.WriteLine("Invalid input.");
-                        continue;
-                }
-                
-                _toolCallQueue.Dequeue();
+                    _messages.Add(new ToolChatMessage(toolCall.Id, result));
+                }, JToken.Parse(arguments.Combine().ToString())));
             }
-
-            else
-            {
-                throw new Exception("Tool not found.");
-            }
+            
+            _messages.Add(new AssistantChatMessage(toolCalls));
         }
-
-        var task = OnChatCompleted?.Invoke(Actor.Tool);
-
+        
+        var task = Completed?.Invoke(Role.Brain);
+        
         if (task != null) await task;
     }
 }

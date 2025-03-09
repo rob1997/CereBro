@@ -1,4 +1,6 @@
 using System;
+using Brain.Tools;
+using OpenAI.Chat;
 
 namespace Brain.Utilities;
 
@@ -27,5 +29,15 @@ public static class Extensions
         }
 
         return new BinaryData(combined);
+    }
+
+    public static ChatTool ChatTool(this ITool tool)
+    {
+        if (tool is OpenAiTool openAiTool)
+        {
+            return openAiTool.ChatTool;
+        }
+        
+        throw new Exception($"The {tool.GetType().Name} must be an instance of {typeof(OpenAiTool)}");
     }
 }
