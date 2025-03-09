@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace Brain.Tools;
@@ -19,7 +20,7 @@ public class WeatherTool : OpenAiTool
         required: new[] { "location", "date" }
     );
 
-    protected override string Execute(JToken arguments)
+    protected override Task<string> Execute(JToken arguments)
     {
         string location = arguments["location"].ToString();
         
@@ -28,6 +29,6 @@ public class WeatherTool : OpenAiTool
         string unit = arguments["unit"] != null ? arguments["unit"].ToString() : "celcius";
         
         // TODO use some weather API to get the weather for the specified location and date
-        return $"31 {unit}";
+        return Task.FromResult($"31 {unit}");
     }
 }

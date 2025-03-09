@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace Brain.Tools;
@@ -10,8 +11,8 @@ public class LocationTool : OpenAiTool
     
     public override ToolParameters? Parameters => null;
 
-    protected override string Execute(JToken arguments)
+    protected override Task<string> Execute(JToken arguments)
     {
-        return "Austin, TX";
+        return Task.FromResult("Austin, TX");
     }
 }

@@ -9,7 +9,7 @@ using OpenAI.Chat;
 
 namespace Brain;
 
-public class OpenAiChatProvider
+public class OpenAiChatProvider : IChatProvider<OpenAiTool>
 {
     public enum Actor
     {
@@ -32,7 +32,7 @@ public class OpenAiChatProvider
 
     public event ChatCompleted OnChatCompleted;
 
-    public OpenAiTool[] Tools =
+    public OpenAiTool[] Tools =>new OpenAiTool[]
     {
         new WeatherTool(),
         new LocationTool(),
@@ -162,7 +162,7 @@ public class OpenAiChatProvider
         if (task != null) await task;
     }
 
-    private Task UseTools()
+    private async Task UseTools()
     {
         _messages.Add(new AssistantChatMessage(_toolCallQueue.ToList()));
 
@@ -179,7 +179,7 @@ public class OpenAiChatProvider
                 switch (Console.ReadLine()?.ToUpper())
                 {
                     case "Y":
-                        string message = tool.Execute(toolCall.FunctionArguments);
+                        string message = await tool.Execute(toolCall.FunctionArguments);
                 
                         _messages.Add(new ToolChatMessage(toolCall.Id, message));
                         break;
@@ -193,8 +193,15 @@ public class OpenAiChatProvider
                 
                 _toolCallQueue.Dequeue();
             }
+
+            else
+            {
+                throw new Exception("Tool not found.");
+            }
         }
 
-        return OnChatCompleted?.Invoke(Actor.Tool);
+        var task = OnChatCompleted?.Invoke(Actor.Tool);
+
+        if (task != null) await task;
     }
 }

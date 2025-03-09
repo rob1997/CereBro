@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenAI.Chat;
@@ -20,14 +21,14 @@ public abstract class OpenAiTool : ITool
         functionParameters: Parameters != null ? BinaryData.FromString(JsonConvert.SerializeObject(Parameters.Value)) : null
     );
 
-    public string Execute(BinaryData raw)
+    public Task<string> Execute(BinaryData raw)
     {
         JToken arguments = ResolveArguments(raw);
         
         return Execute(arguments);
     }
     
-    protected abstract string Execute(JToken arguments);
+    protected abstract Task<string> Execute(JToken arguments);
     
     private JToken ResolveArguments(BinaryData raw)
     {
