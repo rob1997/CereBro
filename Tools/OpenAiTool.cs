@@ -27,8 +27,8 @@ public abstract class OpenAiTool : ITool
         
         return Execute(arguments);
     }
-    
-    protected abstract Task<string> Execute(JToken arguments);
+
+    public abstract Task<string> Execute(JToken arguments);
     
     private JToken ResolveArguments(BinaryData raw)
     {

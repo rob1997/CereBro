@@ -11,7 +11,7 @@ public class DateTool : OpenAiTool
     
     public override ToolParameters? Parameters => null;
 
-    protected override Task<string> Execute(JToken arguments)
+    public override Task<string> Execute(JToken arguments)
     {
         return Task.FromResult("January 1, 2025");
     }

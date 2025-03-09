@@ -9,7 +9,7 @@ using OpenAI.Chat;
 
 namespace Brain;
 
-public class OpenAiChatProvider : IChatProvider<OpenAiTool>
+public class OpenAiChatProvider
 {
     public enum Actor
     {

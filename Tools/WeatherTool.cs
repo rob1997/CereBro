@@ -20,7 +20,7 @@ public class WeatherTool : OpenAiTool
         required: new[] { "location", "date" }
     );
 
-    protected override Task<string> Execute(JToken arguments)
+    public override Task<string> Execute(JToken arguments)
     {
         string location = arguments["location"].ToString();
         
