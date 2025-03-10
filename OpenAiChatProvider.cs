@@ -1,11 +1,9 @@
 using System;
 using System.ClientModel;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Brain.Tools;
 using Brain.Utilities;
-using Newtonsoft.Json.Linq;
 using OpenAI.Chat;
 
 namespace Brain;
@@ -85,7 +83,7 @@ public class OpenAiChatProvider : IChatProvider
         
         List<ChatMessageContentPart> parts = new List<ChatMessageContentPart>();
 
-        Dictionary<string, List<StreamingChatToolCallUpdate>> toolCompletion = new Dictionary<string, List<StreamingChatToolCallUpdate>>();
+        List<ChatToolCall> chatToolCalls = new List<ChatToolCall>();
         
         await foreach (var completionUpdate in _completion)
         {
@@ -94,68 +92,37 @@ public class OpenAiChatProvider : IChatProvider
                 string part = completionUpdate.ContentUpdate[0].Text;
              
                 parts.Add(ChatMessageContentPart.CreateTextPart(part));
+
+                if (parts.Count == 1)
+                {
+                    Console.Write("[BRAIN]: ");
+                }
+                
+                Console.Write(part);
             }
 
             if (completionUpdate.ToolCallUpdates.Count > 0)
             {
-                foreach (var toolCallUpdate in completionUpdate.ToolCallUpdates)
-                {
-                    if (string.IsNullOrEmpty(toolCallUpdate.ToolCallId))
-                    {
-                        if (toolCompletion.Count < 0)
-                        {
-                            throw new Exception("Tool call update without a tool call ID.");
-                        }
-                        
-                        toolCompletion.Last().Value.Add(toolCallUpdate);
-                    }
-                    else
-                    {
-                        if (!toolCompletion.ContainsKey(toolCallUpdate.ToolCallId))
-                        {
-                            toolCompletion.Add(toolCallUpdate.ToolCallId, new List<StreamingChatToolCallUpdate>{ toolCallUpdate });
-                        }
-                        else
-                        {
-                            toolCompletion[toolCallUpdate.ToolCallId].Add(toolCallUpdate);
-                        }
-                    }
-                }
+                completionUpdate.ToolCallUpdates.ChatToolCalls(ref chatToolCalls);
             }
         }
 
         if (parts.Count > 0)
         {
-            Console.Write("[BRAIN]: ");
-            
-            foreach (var part in parts)
-            {
-                Console.Write(part.Text);
-            }
-            
             _messages.Add(new AssistantChatMessage(parts));
         }
 
-        if (toolCompletion.Count > 0)
+        if (chatToolCalls.Count > 0)
         {
-            List<ChatToolCall> toolCalls = new List<ChatToolCall>();
-            
-            foreach (var toolCallUpdates in toolCompletion)
+            foreach (var chatToolCall in chatToolCalls)
             {
-                BinaryData[] arguments = Array.ConvertAll(toolCallUpdates.Value.ToArray(), u => u.FunctionArgumentsUpdate);
-
-                var toolCall = ChatToolCall.CreateFunctionToolCall(toolCallUpdates.Key,
-                    toolCallUpdates.Value[0].FunctionName, arguments.Combine());
-            
-                toolCalls.Add(toolCall);
-                
-                CallQueue.Enqueue(new ToolCall(toolCall.FunctionName, result =>
+                CallQueue.Enqueue(chatToolCall.ToolCall(result =>
                 {
-                    _messages.Add(new ToolChatMessage(toolCall.Id, result));
-                }, JToken.Parse(arguments.Combine().ToString())));
+                    _messages.Add(new ToolChatMessage(chatToolCall.Id, result));
+                }));
             }
             
-            _messages.Add(new AssistantChatMessage(toolCalls));
+            _messages.Add(new AssistantChatMessage(chatToolCalls));
         }
         
         var task = Completed?.Invoke(Role.Brain);

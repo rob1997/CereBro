@@ -1,16 +1,19 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Brain.Tools;
+using Newtonsoft.Json.Linq;
 using OpenAI.Chat;
 
 namespace Brain.Utilities;
 
 public static class Extensions
 {
-    public static BinaryData Combine(this BinaryData[] array)
+    private static BinaryData AggregateBinaryData(params BinaryData[] arguments)
     {
         int length = 0;
         
-        foreach (var data in array)
+        foreach (var data in arguments)
         {
             length += data.ToArray().Length;
         }
@@ -19,7 +22,7 @@ public static class Extensions
         
         int offset = 0;
         
-        foreach (var data in array)
+        foreach (var data in arguments)
         {
             byte[] bytes = data.ToArray();
             
@@ -39,5 +42,50 @@ public static class Extensions
         }
         
         throw new Exception($"The {tool.GetType().Name} must be an instance of {typeof(OpenAiTool)}");
+    }
+
+    private static ChatToolCall Aggregate(this ChatToolCall chatToolCall, StreamingChatToolCallUpdate update)
+    {
+        return ChatToolCall.CreateFunctionToolCall(chatToolCall.Id,
+            chatToolCall.FunctionName, AggregateBinaryData(chatToolCall.FunctionArguments, update.FunctionArgumentsUpdate));
+    }
+    
+    public static void ChatToolCalls(this IEnumerable<StreamingChatToolCallUpdate> updates, ref List<ChatToolCall> chatToolCalls)
+    {
+        foreach (var update in updates)
+        {
+            int index = - 1;
+
+            Predicate<ChatToolCall> match = chatToolCall => update.ToolCallId == chatToolCall.Id;
+            
+            if (chatToolCalls.Any(match.Invoke))
+            {
+                index = chatToolCalls.FindIndex(match);
+            }
+            else if (string.IsNullOrEmpty(update.ToolCallId))
+            {
+                index = chatToolCalls.Count - 1;
+            }
+
+            if (index > - 1)
+            {
+                ChatToolCall toolCall = chatToolCalls[index];
+
+                chatToolCalls[index] = toolCall.Aggregate(update);
+            }
+            
+            else
+            {
+                chatToolCalls.Add(ChatToolCall.CreateFunctionToolCall(update.ToolCallId,
+                        update.FunctionName, update.FunctionArgumentsUpdate));
+            }
+        }
+    }
+    
+    public static ToolCall ToolCall(this ChatToolCall chatToolCall, Action<string> response)
+    {
+        JToken arguments = JToken.Parse(chatToolCall.FunctionArguments.ToString());
+        
+        return new ToolCall(chatToolCall.FunctionName, response, arguments);
     }
 }
