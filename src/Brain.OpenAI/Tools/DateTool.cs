@@ -1,0 +1,21 @@
+using System.Threading.Tasks;
+using Brain.Core.Tools;
+using Newtonsoft.Json.Linq;
+
+namespace Brain.OpenAI.Tools;
+
+public class DateTool : OpenAiTool
+{
+    public override string Name => "GetCurrentDate";
+    
+    public override string DisplayName => "Get Current Date";
+
+    public override string Description => "Get the current date";
+    
+    public override ToolParameters? Parameters => null;
+
+    public override Task<string> Execute(JToken arguments)
+    {
+        return Task.FromResult("January 1, 2025");
+    }
+}
