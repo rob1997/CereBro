@@ -11,6 +11,8 @@ public abstract class OpenAiTool : ITool
 {
     public abstract string Name { get; }
     
+    public abstract string DisplayName { get; }
+
     public abstract string Description { get; }
     
     public abstract ToolParameters? Parameters { get; }

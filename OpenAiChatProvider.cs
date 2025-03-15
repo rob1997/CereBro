@@ -1,6 +1,7 @@
 using System;
 using System.ClientModel;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Brain.Tools;
 using Brain.Utilities;
@@ -10,15 +11,15 @@ namespace Brain;
 
 public class OpenAiChatProvider : IChatProvider
 {
-    private ChatClient _client;
+    private readonly ChatClient _client;
     
-    private ChatCompletionOptions _options;
+    private readonly ChatCompletionOptions _options;
 
     private readonly List<ChatMessage> _messages = new List<ChatMessage>();
 
     private AsyncCollectionResult<StreamingChatCompletionUpdate> _completion;
 
-    public Func<Role, Task> Completed { get; private set; }
+    public Func<Message, Task> Completed { get; set; }
 
     public ITool[] Tools => new ITool[]
     {
@@ -28,6 +29,10 @@ public class OpenAiChatProvider : IChatProvider
     };
 
     public Queue<ToolCall> CallQueue { get; private set; } = new Queue<ToolCall>();
+    
+    private Queue<ChatToolCall> _chatToolCalls = new Queue<ChatToolCall>();
+
+    public IChatDispatcher ChatDispatcher => new ConsoleChatDispatcher();
 
     public OpenAiChatProvider()
     {
@@ -40,65 +45,47 @@ public class OpenAiChatProvider : IChatProvider
             _options.Tools.Add(tool.ChatTool());
         }
         
-        Completed += role =>
+        Completed += message =>
         {
+            Role role = message.Role;
+            
             switch (role)
             {
-                case Role.User: case Role.Tool:
-                    return CompleteBrainChat();
+                case Role.User:
+                    _messages.Add(message.Value);
+                    break;
+                case Role.Tool:
+                    _messages.Add(new ToolChatMessage(_chatToolCalls.Dequeue().Id, message.Value));
+                    break;
                 case Role.Brain:
-                    if (CallQueue.Count != 0)
+                    if (!string.IsNullOrEmpty(message.Value))
                     {
-                        return (this as IChatProvider).UseTools();
+                        _messages.Add(new AssistantChatMessage(message.Value));
                     }
-                    else
+                    if (_chatToolCalls.Count != 0)
                     {
-                        return CompleteUserChat();
+                        _messages.Add(new AssistantChatMessage(_chatToolCalls.ToList()));
                     }
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(role), role, null);
+                    break;
             }
+
+            return Task.CompletedTask;
         };
     }
 
-    public Task StartChat()
-    {
-        return CompleteUserChat();
-    }
-    
-    public Task CompleteUserChat()
-    {
-        Console.WriteLine();
-        
-        Console.Write("[YOU]: ");
-        
-        _messages.Add(Console.ReadLine());
-        
-        return Completed?.Invoke(Role.User);
-    }
-    
-    public async Task CompleteBrainChat()
+    public async Task FetchResponse(Func<string, Task> callback)
     {
         _completion = _client.CompleteChatStreamingAsync(_messages, _options);
         
-        List<ChatMessageContentPart> parts = new List<ChatMessageContentPart>();
-
         List<ChatToolCall> chatToolCalls = new List<ChatToolCall>();
-        
+
         await foreach (var completionUpdate in _completion)
         {
             if (completionUpdate.ContentUpdate.Count > 0)
             {
                 string part = completionUpdate.ContentUpdate[0].Text;
              
-                parts.Add(ChatMessageContentPart.CreateTextPart(part));
-
-                if (parts.Count == 1)
-                {
-                    Console.Write("[BRAIN]: ");
-                }
-                
-                Console.Write(part);
+                await callback(part);
             }
 
             if (completionUpdate.ToolCallUpdates.Count > 0)
@@ -107,26 +94,8 @@ public class OpenAiChatProvider : IChatProvider
             }
         }
 
-        if (parts.Count > 0)
-        {
-            _messages.Add(new AssistantChatMessage(parts));
-        }
-
-        if (chatToolCalls.Count > 0)
-        {
-            foreach (var chatToolCall in chatToolCalls)
-            {
-                CallQueue.Enqueue(chatToolCall.ToolCall(result =>
-                {
-                    _messages.Add(new ToolChatMessage(chatToolCall.Id, result));
-                }));
-            }
-            
-            _messages.Add(new AssistantChatMessage(chatToolCalls));
-        }
+        _chatToolCalls = new Queue<ChatToolCall>(chatToolCalls);
         
-        var task = Completed?.Invoke(Role.Brain);
-        
-        if (task != null) await task;
+        CallQueue = new Queue<ToolCall>(chatToolCalls.Select(c => c.ToolCall()));
     }
 }

@@ -7,6 +7,8 @@ public class DateTool : OpenAiTool
 {
     public override string Name => "GetCurrentDate";
     
+    public override string DisplayName => "Get Current Date";
+
     public override string Description => "Get the current date";
     
     public override ToolParameters? Parameters => null;

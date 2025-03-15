@@ -8,44 +8,85 @@ namespace Brain;
 
 public interface IChatProvider
 {
-    public Func<Role, Task> Completed { get; }
-    
+    public Func<Message, Task> Completed { get; set; }
     
     public ITool[] Tools { get; }
     
     public Queue<ToolCall> CallQueue { get; }
 
-    public async Task UseTools()
+    public IChatDispatcher ChatDispatcher { get; }
+
+    public Task StartConversation()
     {
-        while (CallQueue.Count != 0)
+        Completed += OnCompleted;
+
+        return PromptUser();
+    }
+
+    private Task OnCompleted(Message message)
+    {
+        Role role = message.Role;
+                    
+        switch (role)
         {
-            ToolCall call = CallQueue.Dequeue();
+            case Role.User:
+                return FetchResponse();
+            case Role.Tool:
+                return CallQueue.Count != 0 ?
+                    // Next Tool or Fetch Response from Brain based on Tool Response
+                    UseTool() : FetchResponse();
 
-            call.Response?.Invoke(await UseTool(call));
+            case Role.Brain:
+                return CallQueue.Count != 0 ? 
+                    // Check for Queued Tool Calls before Prompting User
+                    UseTool() : PromptUser();
+            default:
+                throw new ArgumentOutOfRangeException(nameof(role), role, null);
         }
+    }
+    
+    public async Task PromptUser()
+    {
+        string message = await ChatDispatcher.PromptUser();
+        
+        await InvokeCompleted(new Message(Role.User, message));
+    }
 
-        await InvokeCompleted(Role.Tool);
+    Task FetchResponse(Func<string, Task> callback);
+    
+    public async Task FetchResponse()
+    {
+        string message = string.Empty;
+        
+        int index = 0;
+        
+        await FetchResponse(response =>
+        {
+            message += response;
+            
+            return ChatDispatcher.ShowResponse(response, index++);
+        });
+        
+        await InvokeCompleted(new Message(Role.Brain, message));
+    }
+    
+    public async Task UseTool()
+    {
+        ToolCall call = CallQueue.Dequeue();
+
+        await InvokeCompleted(new Message(Role.Tool, await UseTool(call)));
     }
 
     private async Task<string> UseTool(ToolCall call)
     {
         if (GetTool(call.Name, out ITool tool))
         {
-            Console.WriteLine($"[TOOL]: Use {tool.Name} tool? (Y/N)");
-
-            while (true)
+            if (await ChatDispatcher.PromptToolCall(tool))
             {
-                switch (Console.ReadLine()?.ToUpper())
-                {
-                    case "Y":
-                        return await tool.Execute(call.Arguments);
-                    case "N":
-                        return $"{tool.Name} tool usage rejected by user.";
-                    default:
-                        Console.WriteLine("Invalid input.");
-                        continue;
-                }
+                return await tool.Execute(call.Arguments);
             }
+
+            return $"{tool.Name} tool usage rejected by user.";
         }
 
         return $"{call.Name} tool not registered.";
@@ -67,8 +108,8 @@ public interface IChatProvider
         return true;
     }
     
-    private Task InvokeCompleted(Role role)
+    private Task InvokeCompleted(Message message)
     {
-        return Completed?.Invoke(role);
+        return Completed?.Invoke(message);
     }
 }

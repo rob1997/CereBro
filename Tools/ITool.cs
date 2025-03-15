@@ -7,6 +7,8 @@ public interface ITool
 {
     public string Name { get; }
     
+    public string DisplayName { get; }
+    
     public string Description { get; }
 
     public ToolParameters? Parameters { get; }

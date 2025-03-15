@@ -8,7 +8,7 @@ namespace Brain
         {
             var chatProvider = new OpenAiChatProvider();
             
-            return chatProvider.StartChat();
+            return (chatProvider as IChatProvider).StartConversation();
         }
     }
 }

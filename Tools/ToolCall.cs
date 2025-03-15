@@ -9,13 +9,9 @@ public struct ToolCall
     
     public JToken Arguments { get; private set; }
 
-    public Action<string> Response { get; private set; }
-
-    public ToolCall(string name, Action<string> response, JToken arguments = null)
+    public ToolCall(string name, JToken arguments = null)
     {
         Name = name;
-        
-        Response = response;
         
         Arguments = arguments;
     }

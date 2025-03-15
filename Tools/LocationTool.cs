@@ -7,6 +7,8 @@ public class LocationTool : OpenAiTool
 {
     public override string Name => "GetCurrentLocation";
     
+    public override string DisplayName => "Get Current Location";
+
     public override string Description => "Get the user's current location";
     
     public override ToolParameters? Parameters => null;

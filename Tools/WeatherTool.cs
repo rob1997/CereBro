@@ -8,6 +8,8 @@ public class WeatherTool : OpenAiTool
 {
     public override string Name => "GetWeather";
     
+    public override string DisplayName => "Get Weather";
+
     public override string Description => "Get the weather in a given location";
 
     public override ToolParameters? Parameters => new ToolParameters(

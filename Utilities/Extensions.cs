@@ -82,10 +82,10 @@ public static class Extensions
         }
     }
     
-    public static ToolCall ToolCall(this ChatToolCall chatToolCall, Action<string> response)
+    public static ToolCall ToolCall(this ChatToolCall chatToolCall)
     {
         JToken arguments = JToken.Parse(chatToolCall.FunctionArguments.ToString());
         
-        return new ToolCall(chatToolCall.FunctionName, response, arguments);
+        return new ToolCall(chatToolCall.FunctionName, arguments);
     }
 }
