@@ -9,6 +9,20 @@
     </ItemGroup>
     
     <ItemGroup>
+        <None Include="../../README.md" Pack="true" PackagePath="\"/>
         <ProjectReference Include="..\CereBro\CereBro.csproj" />
     </ItemGroup>
+
+    <PropertyGroup>
+        <PackageId>Rob1997.CereBro.Open-AI</PackageId>
+        <Version>1.0.0</Version>
+        <Authors>rob1997</Authors>
+        <Description>Open-AI Implementation for CereBro</Description>
+        <PackageIconUrl></PackageIconUrl>
+        <PackageTags>AI, Agent, .Net, OpenAI</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageProjectUrl>https://github.com/rob1997/CereBro</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/rob1997/CereBro</RepositoryUrl>
+    </PropertyGroup>
 </Project>
