@@ -11,7 +11,7 @@ Below is a list of supported and planned models for CereBro.
 
 **Supported:**
 
-- [OpenAI](https://github.com/rob1997/CereBro/tree/main/src/CereBro.Open-AI/#CereBro.Open-AI)
+- [OpenAI](https://github.com/rob1997/CereBro/tree/main/src/CereBro.Open-AI/#cerebroopen-ai)
 
 **Planned:**
 
@@ -43,7 +43,7 @@ Task conversation = Runner.StartConversation<AIChatProvider, ConsoleChatDispatch
             new WeatherTool()
         });
 ```
-`AIChatProvider` is the Chat Provider for the AI model you want to use, and `ConsoleChatDispatcher` is the Dispatcher that will handle the conversation. You'll have to replace `AIChatProvider` with an implementation of the `IChatProvider`, you can use once the [supported](#supported) providers, or you can (implement)[] your own.
+`AIChatProvider` is the Chat Provider for the AI model you want to use, and `ConsoleChatDispatcher` is the Dispatcher that will handle the conversation. You'll have to replace `AIChatProvider` with an implementation of the `IChatProvider`, you can use once the supported section under [Models](#models) providers, or you can (implement)[] your own.
 
 To create a new Tool, you need to create a new class that implements the `ITool` interface. You can then implement the `Execute(JToken arguments)` method to run/execute your Tool. You can find examples of Tools [here](https://github.com/rob1997/CereBro/tree/main/src/CereBro/Tools/Examples).
 
