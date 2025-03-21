@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <OutputType>Exe</OutputType>
         <RootNamespace>CereBro.OpenAI</RootNamespace>
+        <OutputType>Library</OutputType>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="OpenAI" Version="2.1.0" />

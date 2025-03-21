@@ -42,6 +42,7 @@ Task conversation = Runner.StartConversation<AIChatProvider, ConsoleChatDispatch
             new DateTool(),
             new WeatherTool()
         });
+// Awaitable Task for the conversation
 ```
 `AIChatProvider` is the Chat Provider for the AI model you want to use, and `ConsoleChatDispatcher` is the Dispatcher that will handle the conversation. You'll have to replace `AIChatProvider` with an implementation of the `IChatProvider`, you can use once the supported section under [Models](#models) providers, or you can (implement)[] your own.
 

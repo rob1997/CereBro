@@ -14,3 +14,32 @@ dotnet add package Rob1997.CereBro.Open-AI
 ```
 
 ## Usage
+
+Once you've installed the package, you'll need to add OpenAI's API Key to your environment variables.
+
+```bash
+export OPEN_AI_API_KEY="your-api-key"
+```
+
+```powershell
+$env:OPEN_AI_API_KEY="your-api-key"
+```
+
+If you want this to be permanent, you can add it to your `.bashrc` or `.bash_profile` file in linux or use the following command in PowerShell.
+
+```powershell
+[Environment]::SetEnvironmentVariable("OPEN_AI_API_KEY", "your-api-key", "User")
+```
+
+Once you've set the API Key, you can use the `OpenAIChatProvider` in your `Runner.StartConversation` method.
+
+```csharp
+// Awaitable Task for the conversation
+Task conversation = Runner.StartConversation<OpenAIChatProvider, ConsoleChatDispatcher>(new ITool[]
+        {
+            // Examples
+            new LocationTool(),
+            new DateTool(),
+            new WeatherTool()
+        });
+```
