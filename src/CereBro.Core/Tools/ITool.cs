@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace Brain.Core.Tools;
+namespace CereBro.Core.Tools;
 
 public interface ITool
 {

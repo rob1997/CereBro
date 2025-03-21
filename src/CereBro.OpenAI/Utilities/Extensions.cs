@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Brain.Core.Tools;
+using CereBro.Core.Tools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenAI.Chat;
 
-namespace Brain.OpenAI.Utilities;
+namespace CereBro.OpenAI.Utilities;
 
 public static class Extensions
 {

@@ -1,4 +1,4 @@
-namespace Brain.Core;
+namespace CereBro.Core;
 
 public struct Message
 {

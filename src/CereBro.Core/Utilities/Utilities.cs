@@ -1,8 +1,8 @@
 using System.Linq;
-using Brain.Core.Tools;
+using CereBro.Core.Tools;
 using Newtonsoft.Json.Linq;
 
-namespace Brain.Core.Utilities;
+namespace CereBro.Core.Utilities;
 
 public static class Utilities
 {

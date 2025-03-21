@@ -3,13 +3,13 @@ using System.ClientModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Brain.Core;
-using Brain.Core.Tools;
-using Brain.Core.Tools.Examples;
-using Brain.OpenAI.Utilities;
+using CereBro.Core;
+using CereBro.Core.Tools;
+using CereBro.Core.Tools.Examples;
+using CereBro.OpenAI.Utilities;
 using OpenAI.Chat;
 
-namespace Brain.OpenAI;
+namespace CereBro.OpenAI;
 
 public class OpenAIChatProvider : IChatProvider
 {

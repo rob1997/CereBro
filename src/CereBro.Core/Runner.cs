@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Brain.Core
+namespace CereBro.Core
 {
     public static class Runner
     {

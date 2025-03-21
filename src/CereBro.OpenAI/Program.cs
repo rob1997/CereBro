@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Brain.Core;
+using CereBro.Core;
 
-namespace Brain.OpenAI;
+namespace CereBro.OpenAI;
 
 public static class Program
 {

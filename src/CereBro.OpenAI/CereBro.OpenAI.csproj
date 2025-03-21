@@ -2,12 +2,13 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <OutputType>Exe</OutputType>
+        <RootNamespace>Brain.OpenAI</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="OpenAI" Version="2.1.0" />
     </ItemGroup>
     
     <ItemGroup>
-        <ProjectReference Include="../Brain.Core/Brain.Core.csproj" />
+        <ProjectReference Include="..\CereBro.Core\CereBro.Core.csproj" />
     </ItemGroup>
 </Project>

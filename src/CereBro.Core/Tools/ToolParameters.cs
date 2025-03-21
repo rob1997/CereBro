@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Brain.Core.Tools;
+namespace CereBro.Core.Tools;
 
 public struct ToolParameters
 {

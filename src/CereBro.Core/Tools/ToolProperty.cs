@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Brain.Core.Tools;
+namespace CereBro.Core.Tools;
 
 public struct ToolProperty
 {

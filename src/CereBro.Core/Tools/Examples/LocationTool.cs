@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace Brain.Core.Tools.Examples;
+namespace CereBro.Core.Tools.Examples;
 
 public class LocationTool : ITool
 {
