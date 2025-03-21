@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <RootNamespace>Brain.Core</RootNamespace>
+        <RootNamespace>CereBro.Core</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
