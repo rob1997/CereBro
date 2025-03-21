@@ -17,7 +17,7 @@
         <Version>1.0.0</Version>
         <Authors>rob1997</Authors>
         <Description>AI Agent Wrapper for .Net</Description>
-        <PackageIconUrl></PackageIconUrl>
+        <PackageIconUrl>https://raw.githubusercontent.com/rob1997/CereBro/refs/heads/main/icon.png</PackageIconUrl>
         <PackageTags>AI, Agent, .Net</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
