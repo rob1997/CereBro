@@ -1,6 +1,6 @@
 # CereBro
 [![GitHub release](https://img.shields.io/github/v/release/rob1997/CereBro?include_prereleases)](https://github.com/rob1997/CereBro/releases)
-[![NuGet stable version](https://img.shields.io/nuget/v/Rob1997.CereBro.svg)](https://www.nuget.org/packages/Rob1997.CereBro)
+[![NuGet stable version](https://img.shields.io/nuget/v/Rob1997.CereBro)](https://www.nuget.org/packages/Rob1997.CereBro/)
 [![GitHub license](https://img.shields.io/github/license/rob1997/TrackGenerator)](https://opensource.org/licenses/MIT)
 
 CereBro is a model-agnostic AI Agent Wrapper for .Net. You can write Tools that can be used with different AI models without changing the code.
