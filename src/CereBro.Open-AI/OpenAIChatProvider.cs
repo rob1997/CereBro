@@ -3,9 +3,7 @@ using System.ClientModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CereBro;
 using CereBro.Tools;
-using CereBro.Tools.Examples;
 using CereBro.OpenAI.Utilities;
 using OpenAI.Chat;
 
@@ -23,12 +21,7 @@ public class OpenAIChatProvider : IChatProvider
 
     public Func<Message, Task> Completed { get; set; }
 
-    public ITool[] Tools => new ITool[]
-    {
-        new WeatherTool(),
-        new LocationTool(),
-        new DateTool(),
-    };
+    public ITool[] Tools { get; }
 
     public Queue<ToolCall> CallQueue { get; private set; } = new Queue<ToolCall>();
     
@@ -36,8 +29,10 @@ public class OpenAIChatProvider : IChatProvider
 
     public IChatDispatcher ChatDispatcher { get; private set; }
 
-    public OpenAIChatProvider(IChatDispatcher chatDispatcher)
+    public OpenAIChatProvider(IChatDispatcher chatDispatcher, IEnumerable<ITool> tools)
     {
+        Tools = tools.ToArray();
+        
         ChatDispatcher = chatDispatcher;
         
         _client = new ChatClient(model: "gpt-4o", Environment.GetEnvironmentVariable("OPEN_AI_API_KEY"));
