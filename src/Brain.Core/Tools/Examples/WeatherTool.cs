@@ -1,19 +1,18 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Brain.Core.Tools;
 using Newtonsoft.Json.Linq;
 
-namespace Brain.OpenAI.Tools;
+namespace Brain.Core.Tools.Examples;
 
-public class WeatherTool : OpenAiTool
+public class WeatherTool : ITool
 {
-    public override string Name => "GetWeather";
+    public string Name => "GetWeather";
     
-    public override string DisplayName => "Get Weather";
+    public string DisplayName => "Get Weather";
 
-    public override string Description => "Get the weather in a given location";
+    public string Description => "Get the weather in a given location";
 
-    public override ToolParameters? Parameters => new ToolParameters(
+    public ToolParameters? Parameters => new ToolParameters(
       properties: new Dictionary<string, ToolProperty>
     {
         {"location", new ToolProperty("string", "The city and state, e.g. Boston, MA")},
@@ -23,7 +22,7 @@ public class WeatherTool : OpenAiTool
         required: new[] { "location", "date" }
     );
 
-    public override Task<string> Execute(JToken arguments)
+    public Task<string> Execute(JToken arguments)
     {
         string location = arguments["location"].ToString();
         

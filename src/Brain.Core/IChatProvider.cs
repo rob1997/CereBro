@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Brain.Core.Tools;
+using Brain.Core.Utilities;
 
 namespace Brain.Core;
 
@@ -83,6 +84,14 @@ public interface IChatProvider
         {
             if (await ChatDispatcher.PromptToolCall(tool))
             {
+                if (tool.Parameters != null)
+                {
+                    if (!call.Arguments.Validate(tool.Parameters.Value, out string message))
+                    {
+                        return $"Failed to execute {tool.Name}: {message}";
+                    }
+                }
+                
                 return await tool.Execute(call.Arguments);
             }
 

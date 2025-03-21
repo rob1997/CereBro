@@ -1,0 +1,23 @@
+name: Release 🚀
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+      - name: Build
+        run: dotnet build -c Release
+      - name: Test
+        run: dotnet test -c Release --no-build
+      - name: Pack for Nuget
+        run: dotnet pack -c Release --no-build --output .
+      - name: Push to NuGet
+        run: dotnet nuget push "*.nupkg" --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json

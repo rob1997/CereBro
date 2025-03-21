@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Brain.Core.Tools;
-using Brain.OpenAI.Tools;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenAI.Chat;
 
@@ -37,12 +37,11 @@ public static class Extensions
 
     public static ChatTool ChatTool(this ITool tool)
     {
-        if (tool is OpenAiTool openAiTool)
-        {
-            return openAiTool.ChatTool;
-        }
-        
-        throw new Exception($"The {tool.GetType().Name} must be an instance of {typeof(OpenAiTool)}");
+        return global::OpenAI.Chat.ChatTool.CreateFunctionTool(
+            functionName: tool.Name,
+            functionDescription: tool.Description,
+            functionParameters: tool.Parameters != null ? BinaryData.FromString(JsonConvert.SerializeObject(tool.Parameters.Value)) : null
+        );
     }
 
     private static ChatToolCall Aggregate(this ChatToolCall chatToolCall, StreamingChatToolCallUpdate update)
