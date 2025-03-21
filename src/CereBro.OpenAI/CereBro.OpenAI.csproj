@@ -9,6 +9,6 @@
     </ItemGroup>
     
     <ItemGroup>
-        <ProjectReference Include="..\CereBro.Core\CereBro.Core.csproj" />
+        <ProjectReference Include="..\CereBro\CereBro.csproj" />
     </ItemGroup>
 </Project>

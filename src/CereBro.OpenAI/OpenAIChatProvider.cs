@@ -3,9 +3,9 @@ using System.ClientModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CereBro.Core;
-using CereBro.Core.Tools;
-using CereBro.Core.Tools.Examples;
+using CereBro;
+using CereBro.Tools;
+using CereBro.Tools.Examples;
 using CereBro.OpenAI.Utilities;
 using OpenAI.Chat;
 

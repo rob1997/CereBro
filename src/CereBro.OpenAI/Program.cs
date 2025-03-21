@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using CereBro.Core;
+using CereBro;
 
 namespace CereBro.OpenAI;
 

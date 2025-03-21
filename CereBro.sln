@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CereBro.Core", "src\CereBro.Core\CereBro.Core.csproj", "{E7DAE852-D083-46BF-9818-180A6BB7DD43}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CereBro", "src\CereBro\CereBro.csproj", "{E7DAE852-D083-46BF-9818-180A6BB7DD43}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CereBro.OpenAI", "src\CereBro.OpenAI\CereBro.OpenAI.csproj", "{813067E7-8D3A-4AE7-942D-81AA8523BBC3}"
 EndProject

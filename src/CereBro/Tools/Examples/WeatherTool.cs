@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace CereBro.Core.Tools.Examples;
+namespace CereBro.Tools.Examples;
 
 public class WeatherTool : ITool
 {

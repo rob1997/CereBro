@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using CereBro.Core.Tools;
+using CereBro.Tools;
 
-namespace CereBro.Core;
+namespace CereBro;
 
 public class ConsoleChatDispatcher : IChatDispatcher
 {

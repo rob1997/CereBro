@@ -1,4 +1,4 @@
-namespace CereBro.Core;
+namespace CereBro;
 
 public enum Role
 {

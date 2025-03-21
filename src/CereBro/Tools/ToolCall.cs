@@ -1,6 +1,6 @@
 using Newtonsoft.Json.Linq;
 
-namespace CereBro.Core.Tools;
+namespace CereBro.Tools;
 
 public struct ToolCall
 {

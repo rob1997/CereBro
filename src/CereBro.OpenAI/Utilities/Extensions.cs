@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CereBro.Core.Tools;
+using CereBro.Tools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenAI.Chat;

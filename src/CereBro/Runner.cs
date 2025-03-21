@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CereBro.Core
+namespace CereBro
 {
     public static class Runner
     {

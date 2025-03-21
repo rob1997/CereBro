@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CereBro.Core.Utilities;
-using CereBro.Core.Tools;
+using CereBro.Utilities;
+using CereBro.Tools;
 
-namespace CereBro.Core;
+namespace CereBro;
 
 public interface IChatProvider
 {
