@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CereBro", "src\CereBro\Cere
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CereBro.Open-AI", "src\CereBro.Open-AI\CereBro.Open-AI.csproj", "{813067E7-8D3A-4AE7-942D-81AA8523BBC3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CereBro.Playground", "src\CereBro.Playground\CereBro.Playground.csproj", "{261DEEFA-AB7E-4585-B13D-D69F5E1BA652}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{813067E7-8D3A-4AE7-942D-81AA8523BBC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{813067E7-8D3A-4AE7-942D-81AA8523BBC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{813067E7-8D3A-4AE7-942D-81AA8523BBC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{261DEEFA-AB7E-4585-B13D-D69F5E1BA652}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{261DEEFA-AB7E-4585-B13D-D69F5E1BA652}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{261DEEFA-AB7E-4585-B13D-D69F5E1BA652}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{261DEEFA-AB7E-4585-B13D-D69F5E1BA652}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

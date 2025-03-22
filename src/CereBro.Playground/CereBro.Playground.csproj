@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>CereBro.Playground</RootNamespace>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\CereBro.Open-AI\CereBro.Open-AI.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="./README.md" Pack="true" PackagePath="\"/>
+        <None Include="../../icon.png" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+    
+    <PropertyGroup>
+        <PackageId>Rob1997.CereBro.Playground</PackageId>
+        <Version>1.0.1</Version>
+        <Authors>rob1997</Authors>
+        <Description>CereBro's Playground</Description>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageIconUrl>https://raw.githubusercontent.com/rob1997/CereBro/refs/heads/main/icon.png</PackageIconUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageProjectUrl>https://github.com/rob1997/CereBro</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/rob1997/CereBro</RepositoryUrl>
+    </PropertyGroup>
+</Project>
