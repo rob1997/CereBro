@@ -1,0 +1,20 @@
+[
+  {
+    "Id": "default-server",
+    "Name": "CereBro.Server",
+    "TransportType": "stdio",
+    "TransportOptions": {
+      "command": "dotnet run",
+      "arguments": "--project src/CereBro.Server/CereBro.Server.csproj"
+    }
+  },
+  {
+    "Id": "everything-server",
+    "Name": "Everything",
+    "TransportType": "stdio",
+    "TransportOptions": {
+      "command": "npx",
+      "arguments": "-y @modelcontextprotocol/server-everything"
+    }
+  }
+]

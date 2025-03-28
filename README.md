@@ -1,9 +1,9 @@
 # CereBro
 [![GitHub release](https://img.shields.io/github/v/release/rob1997/CereBro?include_prereleases)](https://github.com/rob1997/CereBro/releases)
 [![NuGet stable version](https://img.shields.io/nuget/v/Rob1997.CereBro)](https://www.nuget.org/packages/Rob1997.CereBro/)
-[![GitHub license](https://img.shields.io/github/license/rob1997/TrackGenerator)](https://opensource.org/licenses/MIT)
+[![GitHub license](https://img.shields.io/github/license/rob1997/CereBro)](https://opensource.org/licenses/MIT)
 
-CereBro is a model-agnostic AI Agent Wrapper for .Net. You can write Tools that can be used with different AI models without changing the code.
+CereBro is a model-agnostic AI Agent Wrapper for .Net. Now with 🔥 **[Model Context Protocol](https://modelcontextprotocol.io/)** 🔥 , based on the [Official C# SDK](https://github.com/modelcontextprotocol/csharp-sdk), you can write Tools that can be used with different AI models without changing the code.
 
 ## Models
 
@@ -19,6 +19,7 @@ Below is a list of supported and planned models for CereBro.
 - [Grok](https://x.ai/)
 - [DeepSeek](https://www.deepseek.com/)
 - [Gemini](https://gemini.google.com/)
+- [Ollama](https://ollama.com/)
 
 ## Installation
 
@@ -26,31 +27,69 @@ You can install the package from NuGet using the following command:
 
 ```bash
 dotnet add package Rob1997.CereBro
+
+dotnet add package Rob1997.CereBro.Open-AI
 ```
 
 ## Usage
 
-To use CereBro, you just need to call `Runner.StartConversation(ITool[] tools)` with an array of Tools.
+### Step 1: Create a `servers.json` file
+
+This file will contain the configuration for the MCP servers you want to use. Below is an example of the `servers.json` file.
+
+```json
+[
+  {
+    "Id": "everything-server",
+    "Name": "Everything",
+    "TransportType": "stdio",
+    "TransportOptions": {
+      "command": "npx",
+      "arguments": "-y @modelcontextprotocol/server-everything"
+    }
+  }
+]
+```
+You can check out more servers [here](https://github.com/modelcontextprotocol/servers/).
+
+### Step 2: Add your OpenAI API Key to your environment variables
+
+```bash
+export OPEN_AI_API_KEY="your-api-key"
+```
+
+```powershell
+$env:OPEN_AI_API_KEY="your-api-key"
+```
+
+If you want this to be permanent, you can add it to your `.bashrc` or `.bash_profile` file in linux or use the following command in PowerShell.
+
+```powershell
+[Environment]::SetEnvironmentVariable("OPEN_AI_API_KEY", "your-api-key", "User")
+```
+
+### Step 3: Add the following code to your `Program.cs` (Entry Point)
 
 ```csharp
-// You'll have to replace AIChatProvider with an implementation of IChatProvider
-// See supported Models section above
-Task conversation = Runner.StartConversation<AIChatProvider, ConsoleChatDispatcher>(new ITool[]
-        {
-            // Examples
-            new LocationTool(),
-            new DateTool(),
-            new WeatherTool()
-        });
-// Awaitable Task for the conversation
+public static async Task Main(string[] args)
+{
+    var builder = Host.CreateApplicationBuilder(args);
+    
+    builder.Services.UseOpenAI(Environment.GetEnvironmentVariable("OPEN_AI_API_KEY"), "gpt-4o-mini");
+            
+    IHost cereBro = builder.BuildCereBro(new CereBroConfig{ ServersFilePath = "./servers.json" });
+
+    await cereBro.RunAsync();
+}
 ```
-`AIChatProvider` is the Chat Provider for the AI model you want to use, and `ConsoleChatDispatcher` is the Dispatcher that will handle the conversation. You'll have to replace `AIChatProvider` with an implementation of the `IChatProvider`, you can use once the supported section under [Models](#models) providers, or you can (implement)[] your own.
 
-To create a new Tool, you need to create a new class that implements the `ITool` interface. You can then implement the `Execute(JToken arguments)` method to run/execute your Tool. You can find examples of Tools [here](https://github.com/rob1997/CereBro/tree/main/src/CereBro/Tools/Examples).
+CereBro uses the Console as a chat dispatcher. You can create your own dispatcher by implementing the [`IChatDispatcher`](https://github.com/rob1997/CereBro/blob/main/src/CereBro/IChatDispatcher.cs) interface and use `builder.BuildCereBro<IChatDispatcher>(config)` to build CereBro's host.
 
-## How it Works
+### Step 4: Run your application
 
-If you would like to know how it works, I've a dev-log entry on it [here](https://rob1997.github.io/devlog/log-5.html).
+```bash
+dotnet run
+```
 
 ## Contributing
 

@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using CereBro.Tools;
 
 namespace CereBro;
 
@@ -13,16 +12,23 @@ public class ConsoleChatDispatcher : IChatDispatcher
         return Task.FromResult(Console.ReadLine());
     }
 
-    public Task ShowResponse(string message, int index)
+    public Task ShowStreamingResponse(string message, int index)
     {
         Console.Write(index == 0 ? $"[BRAIN]: {message}" : message);
 
         return Task.CompletedTask;
     }
 
-    public Task<bool> PromptToolCall(ITool tool)
+    public Task ShowResponse(string message)
     {
-        Console.WriteLine($"[TOOL]: Use `{tool.DisplayName}` tool? (Y/N)");
+        Console.Write($"[BRAIN]: {message}");
+
+        return Task.CompletedTask;
+    }
+
+    public Task<bool> PromptToolCall(string name)
+    {
+        Console.WriteLine($"[TOOL]: Use `{name}` tool? (Y/N)");
         
         while (true)
         {

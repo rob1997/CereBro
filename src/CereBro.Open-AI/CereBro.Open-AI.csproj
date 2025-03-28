@@ -4,19 +4,20 @@
         <RootNamespace>CereBro.OpenAI</RootNamespace>
         <OutputType>Library</OutputType>
     </PropertyGroup>
+    
     <ItemGroup>
-        <PackageReference Include="OpenAI" Version="2.1.0" />
+        <None Include="../../README.md" Pack="true" PackagePath="\"/>
+        <None Include="../../icon.png" Pack="true" PackagePath="\"/>
+        <ProjectReference Include="..\CereBro\CereBro.csproj" />
     </ItemGroup>
     
     <ItemGroup>
-        <None Include="./README.md" Pack="true" PackagePath="\"/>
-        <None Include="../../icon.png" Pack="true" PackagePath="\"/>
-        <ProjectReference Include="..\CereBro\CereBro.csproj" />
+      <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.3.0-preview.1.25161.3" />
     </ItemGroup>
 
     <PropertyGroup>
         <PackageId>Rob1997.CereBro.Open-AI</PackageId>
-        <Version>1.0.1</Version>
+        <Version>1.0.5</Version>
         <Authors>rob1997</Authors>
         <Description>Open-AI Implementation for CereBro</Description>
         <PackageIcon>icon.png</PackageIcon>

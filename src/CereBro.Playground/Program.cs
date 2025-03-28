@@ -1,20 +1,21 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CereBro.OpenAI;
-using CereBro.Tools;
-using CereBro.Tools.Examples;
+using Microsoft.Extensions.Hosting;
 
 namespace CereBro.Playground
 {
     public static class Program
     {
-        public static Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            return Runner.StartConversation<OpenAIChatProvider, ConsoleChatDispatcher>(new ITool[]
-            {
-                new LocationTool(),
-                new DateTool(),
-                new WeatherTool()
-            });
+            var builder = Host.CreateApplicationBuilder(args);
+
+            builder.Services.UseOpenAI(Environment.GetEnvironmentVariable("OPEN_AI_API_KEY"), "gpt-4o-mini");
+            
+            IHost cereBro = builder.BuildCereBro(new CereBroConfig{ ServersFilePath = "./servers.json" });
+
+            await cereBro.RunAsync();
         }
     }
 }
