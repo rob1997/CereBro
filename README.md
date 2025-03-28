@@ -91,6 +91,19 @@ CereBro uses the Console as a chat dispatcher. You can create your own dispatche
 dotnet run
 ```
 
+## Adding a new Model
+
+Currently, CereBro only supports [OpenAI's models](https://platform.openai.com/docs/models). To add a new model you'll need to Implement `Microsoft.Extensions.AI.IChatClient`, unless it already exists, Microsoft already has implementations for some models like [OpenAI](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.openaichatclient?view=net-9.0-pp) and [Ollama](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.ollamachatclient?view=net-9.0-pp).
+
+Once you've done that you can create a Placeholder Type that implements `Microsoft.Extensions.AI.FunctionInvokingChatClient` something like [this](https://github.com/rob1997/CereBro/blob/main/src/CereBro.Open-AI/OpenAIFunctionInvokingChatClient.cs).
+
+Finally, you can use the `UseChatClient<T>(this IServiceCollection services, IChatClient chatClient)
+where T : FunctionInvokingChatClient` extension method to add your model to the service collection.
+
+⚠️ **Note** ⚠️
+
+At the moment CereBro doesn't support multiple models at the same time, so you'll have to remove the `UseOpenAI` method from the `Program.cs` file to use another model.
+
 ## Contributing
 
 If you'd like to contribute to the project, you can fork the repository and create a pull request. You can also create an issue if you find any bugs or have any feature requests.
