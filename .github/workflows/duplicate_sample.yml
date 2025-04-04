@@ -24,7 +24,7 @@ jobs:
         run: |
           git config user.email $git_email
           git config user.name "${{ github.actor }}"
-          git add ./Packages/com.cerebro.unity/Samples~/CereBro.Unity Sample/. -f
+          git add "./Packages/com.cerebro.unity/Samples~/CereBro.Unity Sample/" -f
           git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Package Samples"
           git push
         env:
