@@ -3,6 +3,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <RootNamespace>CereBro.Server</RootNamespace>
         <OutputType>Exe</OutputType>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>

@@ -3,9 +3,9 @@ using ModelContextProtocol.Server;
 
 namespace CereBro.Server.Tools.Examples;
 
-[McpToolType]
+[McpServerToolType]
 public static class LocationTool
 {
-    [McpTool("getLocation"), Description("Gets the current location of the client.")]
+    [McpServerTool("getLocation"), Description("Gets the current location of the client.")]
     public static string Location() => $"Austin, TX";
 }

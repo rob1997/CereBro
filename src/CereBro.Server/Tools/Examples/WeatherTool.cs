@@ -3,10 +3,10 @@ using ModelContextProtocol.Server;
 
 namespace CereBro.Server.Tools.Examples;
 
-[McpToolType]
+[McpServerToolType]
 public static class WeatherTool
 {
-    [McpTool("getWeather"), Description("Gets the weather.")]
+    [McpServerTool("getWeather"), Description("Gets the weather.")]
     public static string Weather(
         [Description("date for the weather")] string date,
         [Description("location for the weather.")] string location,

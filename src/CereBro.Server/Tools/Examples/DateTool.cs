@@ -5,10 +5,10 @@ using ModelContextProtocol.Server;
 
 namespace CereBro.Server.Tools.Examples;
 
-[McpToolType]
+[McpServerToolType]
 public static class DateTool
 {
-    [McpTool("getDate"), Description("Gets the current date.")]
+    [McpServerTool("getDate"), Description("Gets the current date.")]
     public static string GetDate(
         [Description("format for the returned date.")]
         string format = "dd/M/yyyy")

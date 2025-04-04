@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -16,15 +17,15 @@ namespace CereBro;
 
 public class ChatProvider : BackgroundService, IAsyncDisposable
 {
-    private IList<IMcpClient> _mcpClients = [];
+    private readonly IList<IMcpClient> _mcpClients = [];
 
     private readonly IChatClient _chatClient;
 
     private readonly IChatDispatcher _chatDispatcher;
-    
+
     private readonly ICereBroConfig _config;
 
-    private List<AIFunction> _tools = [];
+    private readonly List<McpClientTool> _tools = [];
 
     private readonly List<ChatMessage> _messages = [];
 
@@ -44,12 +45,19 @@ public class ChatProvider : BackgroundService, IAsyncDisposable
 
         foreach (var server in servers)
         {
+            AssemblyName assembly = Assembly.GetExecutingAssembly().GetName();
+
             var mcpClient = await McpClientFactory.CreateAsync(server,
-                new McpClientOptions { ClientInfo = new Implementation { Name = "CereBro", Version = "1.0.0", } },
-                cancellationToken: cancellationToken);
-            
-            _tools.AddRange(await mcpClient.GetAIFunctionsAsync(cancellationToken: cancellationToken));
-            
+                new McpClientOptions
+                {
+                    ClientInfo = new Implementation
+                    {
+                        Name = assembly.FullName, Version = assembly.Version?.ToString() ?? "1.0.0",
+                    }
+                }, cancellationToken: cancellationToken);
+
+            _tools.AddRange(await mcpClient.ListToolsAsync(cancellationToken));
+
             _mcpClients.Add(mcpClient);
         }
 
@@ -102,24 +110,25 @@ public class ChatProvider : BackgroundService, IAsyncDisposable
 
                     foreach (var call in calls)
                     {
-                        CallToolResponse response = default;
+                        CallToolResponse response;
 
                         if (await _chatDispatcher.PromptToolCall(call.Name))
                         {
-                            if (GetTool(call.Name, out AIFunction tool))
+                            if (GetTool(call.Name, out McpClientTool tool))
                             {
                                 var result = await tool.InvokeAsync((Dictionary<string, object>)call.Arguments ?? [],
                                     cancellationToken: cancellationToken);
 
                                 string json = result?.ToString();
-                                
+
                                 if (json != null)
                                 {
                                     using var stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
-                                
-                                    response = await JsonSerializer.DeserializeAsync<CallToolResponse>(stream, cancellationToken: cancellationToken);
+
+                                    response = await JsonSerializer.DeserializeAsync<CallToolResponse>(stream,
+                                        cancellationToken: cancellationToken);
                                 }
-                                
+
                                 else
                                 {
                                     response = ErrorResponse($"Tool '{call.Name}' returned null.");
@@ -162,34 +171,24 @@ public class ChatProvider : BackgroundService, IAsyncDisposable
         _messages.AddMessages(updates);
     }
 
-    private bool GetTool(string name, out AIFunction tool)
+    private bool GetTool(string name, out McpClientTool tool)
     {
         tool = _tools.FirstOrDefault(t => t.Name == name);
 
         return tool != null;
     }
-    
+
     private static CallToolResponse ErrorResponse(string message)
     {
-        return new CallToolResponse
-        {
-            Content =
-            [
-                new Content { Text = message, Type = "text" }
-            ],
-            IsError = true,
-        };
-    }
-    
-    public override void Dispose()
-    {
-        base.Dispose();
-
-        _chatClient.Dispose();
+        return new CallToolResponse { Content = [new Content { Text = message, Type = "text" }], IsError = true, };
     }
 
     public async ValueTask DisposeAsync()
     {
+        base.Dispose();
+
+        _chatClient.Dispose();
+
         foreach (var mcpClient in _mcpClients)
         {
             await mcpClient.DisposeAsync();

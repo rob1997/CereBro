@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>CereBro.Server.Unity</RootNamespace>
+        <OutputType>Exe</OutputType>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\CereBro\CereBro.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+    </ItemGroup>
+    
+</Project>

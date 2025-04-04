@@ -1,5 +1,14 @@
 [
   {
+    "Id": "everything-server",
+    "Name": "Everything",
+    "TransportType": "stdio",
+    "TransportOptions": {
+      "command": "npx",
+      "arguments": "-y @modelcontextprotocol/server-everything"
+    }
+  },
+  {
     "Id": "default-server",
     "Name": "CereBro.Server",
     "TransportType": "stdio",
@@ -9,12 +18,12 @@
     }
   },
   {
-    "Id": "everything-server",
-    "Name": "Everything",
+    "Id": "default-server",
+    "Name": "CereBro.Server",
     "TransportType": "stdio",
     "TransportOptions": {
-      "command": "npx",
-      "arguments": "-y @modelcontextprotocol/server-everything"
+      "command": "dotnet run",
+      "arguments": "--project src/CereBro.Server.Unity/CereBro.Server.Unity.csproj --port 5050"
     }
   }
 ]
