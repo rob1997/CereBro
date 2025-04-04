@@ -22,8 +22,8 @@
     "Name": "CereBro.Server",
     "TransportType": "stdio",
     "TransportOptions": {
-      "command": "dotnet run",
-      "arguments": "--project src/CereBro.Server.Unity/CereBro.Server.Unity.csproj --port 5050"
+      "command": "dotnet \"./src/SampleProject/CereBro.Server.Unity/CereBro.Server.Unity.dll\"",
+      "arguments": "--port 5050"
     }
   }
 ]
