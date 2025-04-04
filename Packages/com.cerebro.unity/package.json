@@ -1,0 +1,28 @@
+{
+  "name": "com.cerebro.unity",
+  "version": "1.0.5",
+  "displayName": "CereBro.Unity",
+  "description": "A Model Agnostic MCP (Model Context Protocol) Clinet-Server for Unity.",
+  "license": "MIT",
+  "licensesUrl": "https://github.com/rob1997/CereBro/blob/main/LICENSE",
+  "documentationUrl": "https://github.com/rob1997/CereBro?tab=readme-ov-file#cerebro",
+  "dependencies": {
+  },
+  "keywords": [
+    "ai",
+    "llm",
+    "agent",
+    "dotnet",
+    "unity",
+    "csharp",
+    "mcp",
+    "modelcontentprotocol"
+  ],
+  "samples": [
+    {
+      "displayName": "CereBro.Unity Sample",
+      "description": "A sample implementing Editor and Runtime tools for Unity using CereBro.Unity",
+      "path": "Samples~/CereBro.Unity Sample"
+    }
+  ]
+}
