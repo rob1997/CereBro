@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.0-preview.2.25163.2" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.2.25163.2" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0-preview.2.25163.2" />
       <PackageReference Include="ModelContextProtocol" Version="0.1.0-preview.2" />
