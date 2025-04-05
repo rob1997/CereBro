@@ -5,7 +5,7 @@
   "description": "A Model Agnostic MCP (Model Context Protocol) Clinet-Server for Unity.",
   "license": "MIT",
   "licensesUrl": "https://github.com/rob1997/CereBro/blob/main/LICENSE",
-  "documentationUrl": "https://github.com/rob1997/CereBro?tab=readme-ov-file#cerebro",
+  "documentationUrl": "https://github.com/rob1997/CereBro/tree/main/Packages/com.cerebro.unity#cerebrounity",
   "dependencies": {
   },
   "keywords": [

@@ -106,7 +106,7 @@ At the moment CereBro doesn't support multiple models at the same time, so you'l
 
 ## CereBro.Unity
 
-CereBro.Unity is a Unity package that allows you to use CereBro in Unity. [README]().
+CereBro.Unity is a Unity package that allows you to use CereBro in Unity. [README](https://github.com/rob1997/CereBro/tree/main/Packages/com.cerebro.unity#cerebrounity).
 
 ## Contributing
 
