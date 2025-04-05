@@ -27,14 +27,18 @@ namespace CereBro.Unity
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
             
-            AssemblyReloadEvents.beforeAssemblyReload += () =>
+            AssemblyReloadEvents.beforeAssemblyReload += CancelAndClose;
+            
+            EditorApplication.quitting += CancelAndClose;
+            
+            await Run(port, cancellationTokenSource.Token);
+            
+            void CancelAndClose()
             {
                 cancellationTokenSource.Cancel();
                 
                 Close();
-            };
-            
-            await Run(port, cancellationTokenSource.Token);
+            }
         }
 #endif
 

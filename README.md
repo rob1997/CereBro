@@ -104,6 +104,10 @@ where T : FunctionInvokingChatClient` extension method to add your model to the 
 
 At the moment CereBro doesn't support multiple models at the same time, so you'll have to remove the `UseOpenAI` method from the `Program.cs` file to use another model.
 
+## CereBro.Unity
+
+CereBro.Unity is a Unity package that allows you to use CereBro in Unity. [README]().
+
 ## Contributing
 
 If you'd like to contribute to the project, you can fork the repository and create a pull request. You can also create an issue if you find any bugs or have any feature requests.
