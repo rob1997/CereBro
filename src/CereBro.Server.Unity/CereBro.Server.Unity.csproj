@@ -14,6 +14,11 @@
     <ItemGroup>
       <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../../README.md" Pack="true" PackagePath="\"/>
+        <None Include="../../icon.png" Pack="true" PackagePath="\"/>
+    </ItemGroup>
     
     <PropertyGroup>
         <PackageId>Rob1997.CereBro.Server.Unity</PackageId>
