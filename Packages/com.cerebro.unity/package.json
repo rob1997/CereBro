@@ -1,6 +1,6 @@
 {
   "name": "com.cerebro.unity",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "displayName": "CereBro.Unity",
   "description": "A Model Agnostic MCP (Model Context Protocol) Clinet-Server for Unity.",
   "license": "MIT",

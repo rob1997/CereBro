@@ -15,4 +15,16 @@
       <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     </ItemGroup>
     
+    <PropertyGroup>
+        <PackageId>Rob1997.CereBro.Server.Unity</PackageId>
+        <Version>1.0.6</Version>
+        <Authors>rob1997</Authors>
+        <Description>Used as an intermediary MCP Server to relay data between the MCP Client and CereBro.Unity</Description>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageIconUrl>https://raw.githubusercontent.com/rob1997/CereBro/refs/heads/main/icon.png</PackageIconUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageProjectUrl>https://github.com/rob1997/CereBro</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/rob1997/CereBro</RepositoryUrl>
+    </PropertyGroup>
 </Project>

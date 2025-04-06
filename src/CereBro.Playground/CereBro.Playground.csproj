@@ -16,7 +16,7 @@
 
     <PropertyGroup>
         <PackageId>Rob1997.CereBro.Playground</PackageId>
-        <Version>1.0.5</Version>
+        <Version>1.0.6</Version>
         <Authors>rob1997</Authors>
         <Description>CereBro's Playground</Description>
         <PackageIcon>icon.png</PackageIcon>

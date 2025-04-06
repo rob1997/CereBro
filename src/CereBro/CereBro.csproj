@@ -26,7 +26,7 @@
     
     <PropertyGroup>
         <PackageId>Rob1997.CereBro</PackageId>
-        <Version>1.0.5</Version>
+        <Version>1.0.6</Version>
         <Authors>rob1997</Authors>
         <Description>AI Agent Wrapper for .Net</Description>
         <PackageIcon>icon.png</PackageIcon>
