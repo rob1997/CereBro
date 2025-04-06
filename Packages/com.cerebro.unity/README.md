@@ -27,14 +27,17 @@ This will import `CereBro.Server.Unity` in the root directory of your Unity Proj
 You need to configure your specific chat client to use `CereBro.Server.Unity`. You can do this by adding this to your servers config file.
 
 ```json
-{
-  "unity-server": {
-    "command": "dotnet \"<Path To Unity Project>/CereBro.Server.Unity/CereBro.Server.Unity.dll\"",
-    "args": [
-      "--port <Port Number>"
-    ]
-  }
-}
+"servers": {
+      "cerebro-server-unity": {
+        "type": "stdio",
+        "command": "dotnet",
+        "args": [
+          "<Path to Unity Project>/CereBro.Server.Unity/CereBro.Server.Unity.dll",
+          "--port",
+          "<Port Number>"
+        ]
+      }
+    }
 ```
 
 If you're using `CereBro` as a client you can add this to your `servers.json` file.
